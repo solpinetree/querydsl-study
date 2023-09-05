@@ -1,0 +1,17 @@
+spring:
+  datasource:
+    url: jdbc:mariadb://localhost:3308/querydsl
+    username: root
+    password: 1234
+
+  jpa:
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.MariaDB103Dialect
+
+logging:
+  level:
+    org.hibernate.SQL: debug
