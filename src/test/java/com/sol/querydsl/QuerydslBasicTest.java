@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import static com.sol.querydsl.entity.QMember.member;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
@@ -58,12 +59,25 @@ public class QuerydslBasicTest {
 
     @Test
     public void startQuerydsl() {
-        QMember m = new QMember("m");
+
+//        QMember m1 = new QMember("m1"); -> 같은 테이블에서 조인이 필요한 경우에는 이렇게 선언해서 사용한다.
 
         Member findMember = queryFactory
-                .select(m)
-                .from(m)
-                .where(m.username.eq("member1")) // 파라미터 바인딩 처리
+                .select(member)
+                .from(member)
+                .where(member.username.eq("member1")) // 파라미터 바인딩 처리
+                .fetchOne();
+
+        assertThat(findMember.getUsername()).isEqualTo("member1");
+    }
+
+    @Test
+    public void search() {
+        Member findMember = queryFactory
+                .selectFrom(member)
+                .where(
+                        member.username.eq("member1"),
+                        member.age.eq(10))
                 .fetchOne();
 
         assertThat(findMember.getUsername()).isEqualTo("member1");
